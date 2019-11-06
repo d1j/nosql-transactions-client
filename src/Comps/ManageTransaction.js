@@ -33,9 +33,15 @@ class ManageTransaction extends Component {
         ammount: self.state.ammount
       })
       .then(res => {
-        self.setState({
-          message: `Pinigai sėkmingai pervesti. Naujos transakcijos ID: ${res.data.transaction_id}`
-        });
+        if (res.data.status == "ok")
+          self.setState({
+            message: `Transakcijos uzklausa priimta.`
+          });
+        else {
+          self.setState({
+            message: `Transakcija nepriimta.`
+          });
+        }
       })
       .catch(err => {
         self.setState({

@@ -41,14 +41,27 @@ class DisplayUsers extends Component {
         <div>
           {this.state.data.map((user, index) => {
             return (
-              <div style={{ border: "solid 1px black" }} key={index}>
+              <div
+                style={{
+                  border: "solid 1px black",
+                  margin: "10px",
+                  padding: "10px "
+                }}
+                key={index}
+              >
                 <p> Varototojo ID: {user.id}</p>
                 <p> Vardas: {user.name}</p>
                 <p> Pavarde: {user.surname}</p>
                 <p> El. paštas: {user.email}</p>
                 <p> Tel. Nr.: {user.phone}</p>
-                <p> Banko sąskaitos ID: {user.account_id}</p>
-                <p> Sąskaitos likutis: {user.account_balance}</p>
+                {typeof user.account_id != "undefined" && (
+                  <div style={{ border: "solid 1px red", padding: "10px" }}>
+                    <p> Banko sąskaitos ID: {user.account_id}</p>
+                    <p> Sąskaitos likutis: {user.balance} pinigų</p>
+                    <p> Kortelės numeris: {user.card_number}</p>
+                    <p> Galiojimo pabaiga: {user.expiry_date}</p>
+                  </div>
+                )}
               </div>
             );
           })}

@@ -12,16 +12,35 @@ class CreateAccount extends Component {
 
       user_id: "",
       balance: "",
+      card_number: "",
+      expiry_date: "",
 
       message: ""
     };
     this.registerUser = this.registerUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.openAccount = this.openAccount.bind(this);
+    this.flushRedis = this.flushRedis.bind(this);
   }
 
   handleChange(e) {
     this.setState({ [e.target.id]: e.target.value });
+  }
+
+  flushRedis() {
+    let self = this;
+    axios
+      .get(`${self.props.host}/flush-redis`)
+      .then(res => {
+        self.setState({
+          message: "Duomenys sunaikinti sėkmingai."
+        });
+      })
+      .catch(err => {
+        self.setState({
+          message: "Nepavyko sunaikinti duomenų."
+        });
+      });
   }
 
   registerUser(e) {
@@ -39,7 +58,7 @@ class CreateAccount extends Component {
           message: `Vartotojas sėkmingai užregistruotas. Naujo varototojo ID: ${res.data.user_id}`
         });
       })
-      .catch(res => {
+      .catch(err => {
         self.setState({
           message: "Nepavyko užregistruoti naujo vartotojo."
         });
@@ -52,7 +71,9 @@ class CreateAccount extends Component {
     axios
       .post(`${self.props.host}/open-account`, {
         user_id: self.state.user_id,
-        balance: self.state.balance
+        balance: self.state.balance,
+        expiry_date: self.state.expiry_date,
+        card_number: self.state.card_number
       })
       .then(res => {
         self.setState({
@@ -119,11 +140,26 @@ class CreateAccount extends Component {
             value={this.state.balance}
             onChange={this.handleChange}
           />
-          $<button type="submit">Atidaryti</button>
+          $ Kortelės numeris:
+          <input
+            required
+            id="card_number"
+            value={this.state.card_number}
+            onChange={this.handleChange}
+          />
+          Galiojimo pabaiga:
+          <input
+            required
+            id="expiry_date"
+            value={this.state.expiry_date}
+            onChange={this.handleChange}
+          />
+          <button type="submit">Atidaryti</button>
         </form>
         <p>
           <i>{this.state.message}</i>
         </p>
+        <button onClick={this.flushRedis}>Sunaikinti duomenis</button>
       </div>
     );
   }

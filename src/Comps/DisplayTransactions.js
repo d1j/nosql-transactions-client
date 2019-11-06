@@ -41,7 +41,7 @@ class DisplayTransactions extends Component {
               <div style={{ border: "solid 1px black" }} key={index}>
                 <p> Siuntėjo ID: {trans.sender_id}</p>
                 <p> Gavėjo ID: {trans.receiver_id}</p>
-                <p> Pinigų kiekis: {trans.ammount}</p>
+                <p> Pinigų kiekis: {trans.ammount} pinigų</p>
               </div>
             );
           })}
